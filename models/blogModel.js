@@ -1,18 +1,24 @@
-import mongoose from "mongoose";
-
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 // document to be stored in mongodb
-const blogSchema = new mongoose.Schema({
-	title: {
-		type: String,
-		required: true,
+const blogSchema = new Schema(
+	{
+		title: {
+			type: String,
+			required: true,
+		},
+		content: String,
+		author: {
+      type: Schema.Types.ObjectId,
+      ref:"User"//mongoose ki objectId from user collection
+    },
 	},
-	content: String,
-	// mongoose will add a createdAt and updatedAt field 
-  timestamps : true,
-  author : Number,
-});
+	// mongoose will add a createdAt and updatedAt field
 
-// create blog model from the above schema 
-const Blog = mongoose.model("Blog", blogSchema)
+	{ timestamps: true }
+);
+
+// create blog model from the above schema
+const Blog = mongoose.model('Blog', blogSchema);
 
 export default Blog;

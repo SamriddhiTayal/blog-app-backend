@@ -2,6 +2,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import express from 'express';
 import userRouter from './routes/userRouter';
+import blogRouter from './routes/blogRouter';
 
 const app = express();
 
@@ -22,10 +23,14 @@ mongoose
 	});
 
 const func = (req, res) => {
-	res.send('Ok');
+	res.json({ success: true, message: 'Welcome', data: null });
 };
+// based on the url the request id redirected
 app.get('/', func);
 app.use('/user', userRouter);
+// eg if the url is /blog/add then redirected to blogRouter
+app.use('/blog', blogRouter);
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(`App running on port ${port}...`);
