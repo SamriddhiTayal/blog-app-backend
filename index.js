@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import express from 'express';
-import userRouter from './routes/userRouter';
-import blogRouter from './routes/blogRouter';
+import userRouter from '../server/routes/userRouter.js';
+import blogRouter from '../server/routes/blogRouter.js';
 
 const app = express();
 
