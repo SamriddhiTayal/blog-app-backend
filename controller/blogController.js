@@ -21,7 +21,7 @@ const addBlog = async (req, res) => {
 	if (!content) {
 		return res.json({
 			success: false,
-			message: 'blog is not vaid',
+			message: 'blog is not valid',
 			data: { content },
 		});
 	}
