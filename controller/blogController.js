@@ -8,7 +8,7 @@ const addBlog = async (req, res) => {
 	// const author = body.author;
 
 	// object destructing
-	const { title, content } = req.body;
+	const { author, title, content } = req.body;
 	// const title = req.body.title;
 	// const content = req.body.content;
 	if (!title) {
@@ -28,6 +28,7 @@ const addBlog = async (req, res) => {
 	// create new object of blog
 	// create entity of that object
 	const blog = new Blog({
+		author,
 		title,
 		content,
 	});
@@ -49,5 +50,28 @@ const addBlog = async (req, res) => {
 	});
 };
 const editBlog = (req, res) => {};
-const deleteBlog = (req, res) => {};
+const deleteBlog = async (req, res) => {
+	const { id } = req.body;
+	try {
+		const blog = await Blog.findByIdAndDelete(id);
+		if (!blog) {
+			return res.json({
+				success: false,
+				message: 'Id Provided is not valid',
+				data: null,
+			});
+		}
+		res.json({
+			success: true,
+			message: 'Blog deleted successfully',
+			data: id,
+		});
+	} catch (err) {
+		return res.json({
+			success: false,
+			message: 'Error occured while deleting the blog ',
+			data: { err },
+		});
+	}
+};
 export { addBlog, editBlog, deleteBlog };
