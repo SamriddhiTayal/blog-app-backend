@@ -5,6 +5,6 @@ const blogRouter = express.Router();
 
 blogRouter.post('/add', addBlog);
 blogRouter.post('/edit', editBlog);
-blogRouter.delete('/delete', deleteBlog);
+blogRouter.post('/delete', deleteBlog);
 
 export default blogRouter;

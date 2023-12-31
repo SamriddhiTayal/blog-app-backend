@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+const SALT_WORK_FACTOR = 10;
 const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
-		required: [true, 'Providing a username is must'],
+		required: [true, 'Username is mandatory'],
 		unique: true,
 	},
 	email: String,
@@ -11,9 +12,8 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-});
-const SALT_WORK_FACTOR = 10;
-userSchema.pre('save', function(next){
+},{timestamps : true});
+userSchema.pre('save', function (next) {
 	const user = this;
 	const generateSaltFunc = (err, salt) => {
 		if (err) return nexr(err);
@@ -25,9 +25,7 @@ userSchema.pre('save', function(next){
 		});
 	};
 	bcrypt.genSalt(SALT_WORK_FACTOR, generateSaltFunc);
-})
-
-	
+});
 
 const User = mongoose.model('User', userSchema);
 

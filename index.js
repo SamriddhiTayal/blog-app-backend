@@ -20,6 +20,9 @@ mongoose
 	.then((con) => {
 		// console.log(con.connection);
 		console.log('DB connection successful');
+	})
+	.catch((err)=>{
+		console.log(err);
 	});
 
 const func = (req, res) => {

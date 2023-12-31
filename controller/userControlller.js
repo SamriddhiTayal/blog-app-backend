@@ -1,35 +1,63 @@
 import User from '../models/userModel.js';
-const login = (req, res) => {
+import bcrypt from 'bcrypt';
+const login = async (req, res) => {
 	// extract email id and password
+	console.log(req.body);
 	const { email, password } = req.body;
 	// find the emailId if it exists in db or not
-
-	// hash the password given by user
-	// check with the password from db
+	try {
+		let user = await User.findOne({ email }, function(err, user) {
+			if (err) throw err;
+			// test
+			user.comparePassword(password, function(err, isMatch){
+				if (err) throw err;
+				if (isMatch) {
+					return res.json({
+						success: true,
+						message: 'Logged In',
+						data: { user },
+					});
+				} else {
+					return res.json({
+						success: false,
+						message: 'Check email or password',
+						data: user,
+					});
+				}
+			});
+		});
+	} catch (err) {
+		return res.json({
+			success : false,
+			message : "Error while logging in",
+			data : {err}
+		})
+	}
 
 	// send response
 };
 const signup = async (req, res) => {
 	// extract data from req
-	const { username, email, password } = req.body;
 	// console.log(req.body);
+	const { username, email, password } = req.body;
 	// validate email id - if already exits in db or is even valid or not
 	try {
 		let user = await User.findOne({ email });
-		if (user) {
-			return res.json({
-				success: false,
-				message: 'The user already exits ',
-				data: { email },
-			});
-		}
 		if (!email || !username) {
 			return res.json({
 				success: false,
-				message: 'Kindly check emailId and username',
+				message: 'Kindly check email or username does not exists',
 				data: { username, email },
 			});
 		}
+		if (user) {
+			return res.json({
+				success: false,
+				message: 'The user already exists',
+				data: { email },
+			});
+		}
+
 		// password encryption using pre save hook- userModel
 		// create object of user
 		user = new User({

@@ -9,9 +9,9 @@ const blogSchema = new Schema(
 		},
 		content: String,
 		author: {
-      type: Schema.Types.ObjectId,
-      ref:"User"//mongoose ki objectId from user collection
-    },
+			type: Schema.Types.ObjectId,
+			ref: 'User', //mongoose ki objectId from user collection
+		},
 	},
 	// mongoose will add a createdAt and updatedAt field
 
