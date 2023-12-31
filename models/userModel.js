@@ -27,6 +27,14 @@ userSchema.pre('save', function (next) {
 	bcrypt.genSalt(SALT_WORK_FACTOR, generateSaltFunc);
 });
 
+// login-> password verification 
+userSchema.methods.comparePassword = function(candidatePassword, cbFunc){
+	bcrypt.compare(candidatePassword, this.password, function(err, isMatch){
+		if(err) throw err;
+		cbFunc(null, isMatch);
+	})
+}
+
 const User = mongoose.model('User', userSchema);
 
 export default User;

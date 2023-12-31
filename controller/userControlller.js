@@ -1,37 +1,38 @@
 import User from '../models/userModel.js';
-import bcrypt from 'bcrypt';
+
 const login = async (req, res) => {
 	// extract email id and password
 	console.log(req.body);
 	const { email, password } = req.body;
 	// find the emailId if it exists in db or not
 	try {
-		let user = await User.findOne({ email }, function(err, user) {
+		let user = await User.findOne({ email });
+		// function (err, user) {
+		// 	if (err) throw err;
+		// test
+		user.comparePassword(password, function (err, isMatch) {
 			if (err) throw err;
-			// test
-			user.comparePassword(password, function(err, isMatch){
-				if (err) throw err;
-				if (isMatch) {
-					return res.json({
-						success: true,
-						message: 'Logged In',
-						data: { user },
-					});
-				} else {
-					return res.json({
-						success: false,
-						message: 'Check email or password',
-						data: user,
-					});
-				}
-			});
+			if (isMatch) {
+				return res.json({
+					success: true,
+					message: 'Logged In',
+					data: { email, password },
+				});
+			} else {
+				return res.json({
+					success: false,
+					message: 'Check email or password',
+					data: {email, password},
+				});
+			}
 		});
 	} catch (err) {
+		console.log('err : ', err);
 		return res.json({
-			success : false,
-			message : "Error while logging in",
-			data : {err}
-		})
+			success: false,
+			message: 'Error while logging in',
+			data: { err },
+		});
 	}
 
 	// send response
