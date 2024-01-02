@@ -22,7 +22,7 @@ const login = async (req, res) => {
 				return res.json({
 					success: false,
 					message: 'Check email or password',
-					data: {email, password},
+					data: {email},
 				});
 			}
 		});
@@ -43,7 +43,6 @@ const signup = async (req, res) => {
 	const { username, email, password } = req.body;
 	// validate email id - if already exits in db or is even valid or not
 	try {
-		let user = await User.findOne({ email });
 		if (!email || !username) {
 			return res.json({
 				success: false,
@@ -51,11 +50,12 @@ const signup = async (req, res) => {
 				data: { username, email },
 			});
 		}
+		let user = await User.findOne({ email });
 		if (user) {
 			return res.json({
 				success: false,
 				message: 'The user already exists',
-				data: { email },
+				data: {username, email }
 			});
 		}
 

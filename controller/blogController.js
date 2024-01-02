@@ -3,27 +3,36 @@
 import Blog from '../models/blogModel.js';
 
 const addBlog = async (req, res) => {
-	// condition add that same author cannot add same blog
-
+	
 	// req body se data extract
 	// console.log(req.body);
 	// const author = body.author;
-
+	
 	// object destructing
 	const { author, title, content } = req.body;
 	try {
-		// const title = req.body.title;
-		// const content = req.body.content;
 		if (!title || !content) {
 			return res.json({
 				success: false,
 				message: 'Please check title or content',
-				data: { title },
+				data: { title, content },
 			});
 		}
-
+		// condition add that same author cannot add same blog
+		let blog = await Blog.findOne({
+			author,
+			title,
+			content
+		});
+		if (blog) {
+			return res.json({
+				success: false,
+				message: 'Blog already exists',
+				data: { title, content },
+			});
+		}
 		// create new object of blog
-		const blog = new Blog({
+		blog = new Blog({
 			author,
 			title,
 			content,
@@ -47,11 +56,11 @@ const addBlog = async (req, res) => {
 const editBlog = async (req, res) => {
 	const { id, title, content } = req.body;
 	try {
-		if (!title || !content) {
+		if (!id || !title || !content) {
 			return res.json({
 				success: false,
-				message: 'Check title and blog',
-				data: { title, content },
+				message: 'Check id, title and blog',
+				data: {id, title, content },
 			});
 		}
 		const blog = await Blog.findByIdAndUpdate(
@@ -61,7 +70,7 @@ const editBlog = async (req, res) => {
 				new: true,
 			}
 		);
-		
+
 		return res.json({
 			success: true,
 			message: 'Blog updated',
