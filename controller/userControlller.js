@@ -2,7 +2,7 @@ import User from '../models/userModel.js';
 
 const login = async (req, res) => {
 	// extract email id and password
-	console.log(req.body);
+	// console.log(req.body);
 	const { email, password } = req.body;
 	// find the emailId if it exists in db or not
 	try {
@@ -25,7 +25,7 @@ const login = async (req, res) => {
 					data: {email},
 				});
 			}
-		});
+		}); 
 	} catch (err) {
 		console.log('err : ', err);
 		return res.json({

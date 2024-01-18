@@ -1,7 +1,24 @@
 // business logic of the app
 // actual functionality takes places here
 import Blog from '../models/blogModel.js';
-
+const fetchBlogs = async(req,res)=>{
+	try{
+		const blog = await Blog.find({});
+		// console.log("Blog:", blog);
+		return res.json({
+			success: true,
+			message: 'Blogs sent',
+			data: { blog },
+		});
+	}
+	catch(err){
+		return res.json({
+			success: false,
+			message: 'There was an error',
+			data: { err },
+		});
+	}
+}
 const addBlog = async (req, res) => {
 	
 	// req body se data extract
@@ -12,6 +29,7 @@ const addBlog = async (req, res) => {
 	const { author, title, content } = req.body;
 	try {
 		if (!title || !content) {
+
 			return res.json({
 				success: false,
 				message: 'Please check title or content',
@@ -108,4 +126,4 @@ const deleteBlog = async (req, res) => {
 		});
 	}
 };
-export { addBlog, editBlog, deleteBlog };
+export { addBlog, editBlog, deleteBlog, fetchBlogs };

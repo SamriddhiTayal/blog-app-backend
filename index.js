@@ -1,15 +1,15 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import express from 'express';
+import cors from 'cors';
 import userRouter from '../server/routes/userRouter.js';
 import blogRouter from '../server/routes/blogRouter.js';
-
 const app = express();
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 const DB = process.env.DATABASE.replace(
 	'<PASSWORD>',
 	process.env.DATABASE_PASSWORD
@@ -22,7 +22,7 @@ mongoose
 		console.log('DB connection successful');
 	})
 	.catch((err)=>{
-		console.log(err);
+		console.log("err : ",err);
 	});
 
 const func = (req, res) => {
