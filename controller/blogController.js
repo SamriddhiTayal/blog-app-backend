@@ -1,35 +1,36 @@
 // business logic of the app
 // actual functionality takes places here
 import Blog from '../models/blogModel.js';
-const fetchBlogs = async(req,res)=>{
-	try{
-		const blog = await Blog.find({});
-		// console.log("Blog:", blog);
+const fetchBlogs = async (req, res) => {
+	try {
+		// change to username-populate
+		const blogs = await Blog.find().populate({
+			path:'author',
+			select:'username',
+		});
+		// console.log("Blog:", blogs);
 		return res.json({
 			success: true,
-			message: 'Blogs sent',
-			data: { blog },
+			message: 'All Blogs',
+			data: { blogs },
 		});
-	}
-	catch(err){
+	} catch (err) {
 		return res.json({
 			success: false,
 			message: 'There was an error',
 			data: { err },
 		});
 	}
-}
+};
 const addBlog = async (req, res) => {
-	
 	// req body se data extract
 	// console.log(req.body);
 	// const author = body.author;
-	
+
 	// object destructing
 	const { author, title, content } = req.body;
 	try {
 		if (!title || !content) {
-
 			return res.json({
 				success: false,
 				message: 'Please check title or content',
@@ -40,7 +41,7 @@ const addBlog = async (req, res) => {
 		let blog = await Blog.findOne({
 			author,
 			title,
-			content
+			content,
 		});
 		if (blog) {
 			return res.json({
@@ -78,7 +79,7 @@ const editBlog = async (req, res) => {
 			return res.json({
 				success: false,
 				message: 'Check id, title and blog',
-				data: {id, title, content },
+				data: { id, title, content },
 			});
 		}
 		const blog = await Blog.findByIdAndUpdate(
