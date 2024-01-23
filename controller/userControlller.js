@@ -1,9 +1,34 @@
 import User from '../models/userModel.js';
+import Blog from '../models/blogModel.js'
+const fetchUserBlogs = async(req, res)=>{
+	const { author } = req.body;
+	// console.log(req.body);
+	try{
+		const blogs = await Blog.find({author}).populate({
+			path : 'author',
+			select:'username'
+		}
+		);
+		return res.json({
+			success : true,
+			message:'User slogs sent',
+			data : {blogs}
+		})
 
+	}catch(err){
+		return res.json({
+			success: false,
+			message: 'Error while fetching data',
+			data: { err },
+		}); 
+	}
+
+
+}
 const login = async (req, res) => {
 	// extract email id and password
 	// console.log(req.body);
-	const { email, password } = req.body;
+	const { email, password } = req.body.data;
 	// find the emailId if it exists in db or not
 	try {
 		let user = await User.findOne({ email });
@@ -82,4 +107,4 @@ const signup = async (req, res) => {
 		});
 	}
 };
-export { login, signup };
+export {fetchUserBlogs, login, signup };

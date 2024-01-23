@@ -2,6 +2,8 @@
 // actual functionality takes places here
 import Blog from '../models/blogModel.js';
 const fetchBlogs = async (req, res) => {
+
+	
 	try {
 		// change to username-populate
 		const blogs = await Blog.find().populate({
