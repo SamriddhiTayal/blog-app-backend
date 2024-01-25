@@ -1,30 +1,26 @@
 import User from '../models/userModel.js';
-import Blog from '../models/blogModel.js'
-const fetchUserBlogs = async(req, res)=>{
+import Blog from '../models/blogModel.js';
+const fetchUserBlogs = async (req, res) => {
 	const { author } = req.body;
 	// console.log(req.body);
-	try{
-		const blogs = await Blog.find({author}).populate({
-			path : 'author',
-			select:'username'
-		}
-		);
+	try {
+		const blogs = await Blog.find({ author }).populate({
+			path: 'author',
+			select: 'username',
+		});
 		return res.json({
-			success : true,
-			message:'User slogs sent',
-			data : {blogs}
-		})
-
-	}catch(err){
+			success: true,
+			message: 'User slogs sent',
+			data: { blogs },
+		});
+	} catch (err) {
 		return res.json({
 			success: false,
 			message: 'Error while fetching data',
 			data: { err },
-		}); 
+		});
 	}
-
-
-}
+};
 const login = async (req, res) => {
 	// extract email id and password
 	// console.log(req.body);
@@ -47,10 +43,10 @@ const login = async (req, res) => {
 				return res.json({
 					success: false,
 					message: 'Check email or password',
-					data: {email},
+					data: { email },
 				});
 			}
-		}); 
+		});
 	} catch (err) {
 		console.log('err : ', err);
 		return res.json({
@@ -65,7 +61,7 @@ const login = async (req, res) => {
 const signup = async (req, res) => {
 	// extract data from req
 	// console.log(req.body);
-	const { username, email, password } = req.body;
+	const { username, email, password } = req.body.data;
 	// validate email id - if already exits in db or is even valid or not
 	try {
 		if (!email || !username) {
@@ -80,7 +76,7 @@ const signup = async (req, res) => {
 			return res.json({
 				success: false,
 				message: 'The user already exists',
-				data: {username, email }
+				data: { username, email },
 			});
 		}
 
@@ -107,4 +103,4 @@ const signup = async (req, res) => {
 		});
 	}
 };
-export {fetchUserBlogs, login, signup };
+export { fetchUserBlogs, login, signup };
