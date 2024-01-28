@@ -2,13 +2,11 @@
 // actual functionality takes places here
 import Blog from '../models/blogModel.js';
 const fetchBlogs = async (req, res) => {
-
-	
 	try {
 		// change to username-populate
 		const blogs = await Blog.find().populate({
-			path:'author',
-			select:'username',
+			path: 'author',
+			select: 'username',
 		});
 		// console.log("Blog:", blogs);
 		return res.json({
@@ -30,7 +28,7 @@ const addBlog = async (req, res) => {
 	// const author = body.author;
 
 	// object destructing
-	const { author, title, content } = req.body;
+	const { author, title, content } = req.body.data;
 	try {
 		if (!title || !content) {
 			return res.json({
@@ -75,7 +73,7 @@ const addBlog = async (req, res) => {
 	}
 };
 const editBlog = async (req, res) => {
-	const { id, title, content } = req.body;
+	const { id, title, content } = req.body.data;
 	try {
 		if (!id || !title || !content) {
 			return res.json({
@@ -106,7 +104,9 @@ const editBlog = async (req, res) => {
 	}
 };
 const deleteBlog = async (req, res) => {
+	// console.log(req.body);
 	const { id } = req.body;
+	// console.log(id);
 	try {
 		const blog = await Blog.findByIdAndDelete(id);
 		if (!blog) {
