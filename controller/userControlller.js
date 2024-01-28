@@ -1,10 +1,11 @@
 import User from '../models/userModel.js';
 import Blog from '../models/blogModel.js';
 const fetchUserBlogs = async (req, res) => {
+	
 	const { author } = req.body;
 	// console.log(req.body);
 	try {
-		const blogs = await Blog.find({ author }).populate({
+		const blogs = await Blog.find().populate({
 			path: 'author',
 			select: 'username',
 		});
