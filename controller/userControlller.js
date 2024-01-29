@@ -38,7 +38,7 @@ const login = async (req, res) => {
 				return res.json({
 					success: true,
 					message: 'Logged In',
-					data: { email, password },
+					data: user ,
 				});
 			} else {
 				return res.json({
@@ -68,7 +68,7 @@ const signup = async (req, res) => {
 		if (!email || !username) {
 			return res.json({
 				success: false,
-				message: 'Kindly check email or username does not exists',
+				message: 'Kindly check email or username',
 				data: { username, email },
 			});
 		}
