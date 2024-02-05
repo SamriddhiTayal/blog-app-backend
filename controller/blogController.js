@@ -24,7 +24,7 @@ const fetchBlogs = async (req, res) => {
 };
 const addBlog = async (req, res) => {
 	// req body se data extract
-	// console.log(req.body);
+	console.log(req.body);
 	// const author = body.author;
 
 	// object destructing
@@ -55,6 +55,8 @@ const addBlog = async (req, res) => {
 			author,
 			title,
 			content,
+			likes: 0,
+			dislikes: 0,
 		});
 		// store in db
 
@@ -129,4 +131,53 @@ const deleteBlog = async (req, res) => {
 		});
 	}
 };
-export { addBlog, editBlog, deleteBlog, fetchBlogs };
+const likeBlog = async(req, res)=>{
+	const {id} = req.body;
+	try{
+		if(!id){
+			return res.json({
+				success : false,
+				message : "Invalid ID",
+				data : {id},
+			})
+		}
+		const blog = await Blog.findByIdAndUpdate(id, {$inc : {"likes" : 1}});
+		return res.json({
+			success: true,
+			message: 'Blog Liked successfully ',
+			data: { blog },
+		});
+
+	}catch (err){
+		return res.json({
+			success: false,
+			message: 'Error occured while liking the blog ',
+			data: { err },
+		});
+	}
+}
+const dislikeBlog = async (req, res) => {
+	const { id } = req.body;
+	try {
+		if (!id) {
+			return res.json({
+				success: false,
+				message: 'Invalid ID',
+				data: { id },
+			});
+		}
+		const blog = await Blog.findByIdAndUpdate(id, { $inc: { dislikes: 1 } });
+		return res.json({
+			success: true,
+			message: 'Blog disliked successfully ',
+			data: { blog },
+		});
+	} catch (err) {
+		return res.json({
+			success: false,
+			message: 'Error occured while disliking the blog ',
+			data: { err },
+		});
+	}
+};
+export { addBlog, editBlog, deleteBlog, fetchBlogs , likeBlog, dislikeBlog};

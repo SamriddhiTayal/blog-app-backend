@@ -12,6 +12,14 @@ const blogSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'User', //mongoose ki objectId from user collection
 		},
+		likes: {
+			type: Number,
+			default:0
+		},
+		dislikes:{
+			type: Number,
+			default:0
+		}
 	},
 	// mongoose will add a createdAt and updatedAt field
 

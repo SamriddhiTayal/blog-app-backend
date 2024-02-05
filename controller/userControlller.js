@@ -1,13 +1,11 @@
 import User from '../models/userModel.js';
 import Blog from '../models/blogModel.js';
 const fetchUserBlogs = async (req, res) => {
-	
 	const { author } = req.body;
 	// console.log(req.body);
 	try {
-		const blogs = await Blog.find().populate({
+		const blogs = await Blog.find({ author }).populate({
 			path: 'author',
-			select: 'username',
 		});
 		return res.json({
 			success: true,
@@ -38,7 +36,7 @@ const login = async (req, res) => {
 				return res.json({
 					success: true,
 					message: 'Logged In',
-					data: user ,
+					data: user,
 				});
 			} else {
 				return res.json({
