@@ -24,7 +24,7 @@ const fetchBlogs = async (req, res) => {
 };
 const addBlog = async (req, res) => {
 	// req body se data extract
-	console.log(req.body);
+	// console.log(req.body);
 	// const author = body.author;
 
 	// object destructing
@@ -131,31 +131,30 @@ const deleteBlog = async (req, res) => {
 		});
 	}
 };
-const likeBlog = async(req, res)=>{
-	const {id} = req.body;
-	try{
-		if(!id){
+const likeBlog = async (req, res) => {
+	const { id } = req.body;
+	try {
+		if (!id) {
 			return res.json({
-				success : false,
-				message : "Invalid ID",
-				data : {id},
-			})
+				success: false,
+				message: 'Invalid ID',
+				data: { id },
+			});
 		}
-		const blog = await Blog.findByIdAndUpdate(id, {$inc : {"likes" : 1}});
+		const blog = await Blog.findByIdAndUpdate(id, { $inc: { likes: 1 } }, {returnDocument:'after'});
 		return res.json({
 			success: true,
 			message: 'Blog Liked successfully ',
 			data: { blog },
 		});
-
-	}catch (err){
+	} catch (err) {
 		return res.json({
 			success: false,
 			message: 'Error occured while liking the blog ',
 			data: { err },
 		});
 	}
-}
+};
 const dislikeBlog = async (req, res) => {
 	const { id } = req.body;
 	try {
@@ -180,4 +179,4 @@ const dislikeBlog = async (req, res) => {
 		});
 	}
 };
-export { addBlog, editBlog, deleteBlog, fetchBlogs , likeBlog, dislikeBlog};
+export { addBlog, editBlog, deleteBlog, fetchBlogs, likeBlog, dislikeBlog };
