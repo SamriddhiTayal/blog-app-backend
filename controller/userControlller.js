@@ -102,4 +102,57 @@ const signup = async (req, res) => {
 		});
 	}
 };
-export { fetchUserBlogs, login, signup };
+const likeBlog = async (req, res) => {
+	const blogId = req.body.id;
+	const userId = req.body.user;
+	try {
+		if (!blogId || !userId) {
+			return res.json({
+				success: false,
+				message: 'Invalid BlogID or UserID',
+				data: { blogId, userId },
+			});
+		}
+		const user = await User.findByIdAndUpdate(
+			userId,
+			{ $push: { likedBlogs: blogId } },
+			{ returnDocument: 'after' }
+		);
+		return res.json({
+			success: true,
+			message: 'Liked Blog added successfully ',
+			data: { user },
+		});
+	} catch (err) {
+		return res.json({
+			success: false,
+			message: 'Error occured while liking the blog ',
+			data: { err },
+		});
+	}
+};
+const showLikedBlogs = async (req, res) => {
+	const { user } = req.body;
+	try {
+		if (!user) {
+			return res.json({
+				success: false,
+				message: 'Invalid UserId',
+				data: { user },
+			});
+		}
+		const user = await User.findById(user);
+		return res.json({
+			success: true,
+			message: 'Blog disliked successfully ',
+			data: { user },
+		});
+	} catch (err) {
+		return res.json({
+			success: false,
+			message: 'Error occured while disliking the blog ',
+			data: { err },
+		});
+	}
+};
+export { fetchUserBlogs, login, signup, likeBlog, showLikedBlogs };

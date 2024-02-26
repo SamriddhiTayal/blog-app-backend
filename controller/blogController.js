@@ -132,7 +132,7 @@ const deleteBlog = async (req, res) => {
 	}
 };
 const likeBlog = async (req, res) => {
-	const { id } = req.body;
+	const { id, user } = req.body;
 	try {
 		if (!id) {
 			return res.json({
@@ -141,7 +141,11 @@ const likeBlog = async (req, res) => {
 				data: { id },
 			});
 		}
-		const blog = await Blog.findByIdAndUpdate(id, { $inc: { likes: 1 } }, {returnDocument:'after'});
+		const blog = await Blog.findByIdAndUpdate(
+			id,
+			{ $push: {userLiked: user }  },
+			{ returnDocument: 'after' }
+		);
 		return res.json({
 			success: true,
 			message: 'Blog Liked successfully ',
@@ -156,7 +160,7 @@ const likeBlog = async (req, res) => {
 	}
 };
 const dislikeBlog = async (req, res) => {
-	const { id } = req.body;
+	const { id, user } = req.body;
 	try {
 		if (!id) {
 			return res.json({
@@ -165,7 +169,11 @@ const dislikeBlog = async (req, res) => {
 				data: { id },
 			});
 		}
-		const blog = await Blog.findByIdAndUpdate(id, { $inc: { dislikes: 1 } });
+		const blog = await Blog.findByIdAndUpdate(
+			id,
+			{ $push: { userDisliked: user } },
+			{ returnDocument: 'after' }
+		);
 		return res.json({
 			success: true,
 			message: 'Blog disliked successfully ',
@@ -179,4 +187,5 @@ const dislikeBlog = async (req, res) => {
 		});
 	}
 };
+
 export { addBlog, editBlog, deleteBlog, fetchBlogs, likeBlog, dislikeBlog };

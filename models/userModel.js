@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 const SALT_WORK_FACTOR = 10;
 const userSchema = new mongoose.Schema({
@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	likedBlogs:{
+		type : [Schema.Types.ObjectId],
+		ref : 'Blogs'
+	}
 },{timestamps : true});
 userSchema.pre('save', function (next) {
 	const user = this;
